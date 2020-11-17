@@ -13,10 +13,10 @@ export default class DataArea extends Component {
 
   headings = [
     { name: "Image", width: "10%" },
-    { name: "Name", width: "10%" },
+    { name: "Name", width: "20%" },
     { name: "Phone", width: "20%" },
-    { name: "Email", width: "20%" },
-    { name: "DOB", width: "10%" }
+    { name: "Email", width: "30%" },
+    { name: "DOB", width: "20%" }
   ]
 
   handleSort = heading => {
@@ -60,8 +60,40 @@ export default class DataArea extends Component {
       }
 
     }
-    const sortedUsers = this.state.filteredUsers.sort(compareFnc);
-    this.setState({ filteredUsers: sortedUsers });
+    const comparePN = (a, b) => {
+      if (this.state.order === "ascend") {
+        // account for missing values
+        if (a[heading] === undefined) {
+          return 1;
+        } else if (b[heading] === undefined) {
+          return -1;
+        }
+        // numerically
+        else if (heading === "phone") {
+          return a[heading].localeCompare(b[heading]);
+        } else {
+          return a[heading] - b[heading];
+        }
+      } else {
+        // account for missing values
+        if (a[heading] === undefined) {
+          return 1;
+        } else if (b[heading] === undefined) {
+          return -1;
+        }
+        // numerically
+        else if (heading === "phone") {
+          return b[heading].localeCompare(a[heading]);
+        } else {
+          return b[heading] - a[heading];
+        }
+      }
+
+    }
+    const sortedUsersN = this.state.filteredUsers.sort(compareFnc);
+    this.setState({ filteredUsers: sortedUsersN });
+    const sortedUsersP = this.state.filteredUsers.sort(compareFnc);
+    this.setState({ filteredUsers: sortedUsersP });
   }
 
   handleSearchChange = event => {
